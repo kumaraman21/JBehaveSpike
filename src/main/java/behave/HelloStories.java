@@ -25,7 +25,6 @@ public class HelloStories extends JUnitStories {
 	public Configuration configuration() {
 		Properties viewResources = new Properties();
         viewResources.put("decorateNonHtml", "true");
-//        viewResources.put("reports", "stories/ftl/jbehave-views-custom.ftl");
 		
         URL storyURL = null;
         try {
