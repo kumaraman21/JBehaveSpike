@@ -7,7 +7,7 @@
   $(document).ready(function() {
     $('div.step').each(function() {
     	var text = $(this).text();
-    	$(this).html(text.replace(/(\w+\.(xml|txt))/, '<a href="http://jquery.com">$1</a>')); 
+    	$(this).html(text.replace(/(\w+\.(xml|txt))/, '<a href="../../classes/input/$1">$1</a>')); 
 	});
   });
  
