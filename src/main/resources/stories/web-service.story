@@ -6,5 +6,5 @@ As a development team
 I want to use Behaviour-Driven Development
 					 
 Scenario: We can place order using the web service
-When I call the web service to place an order
+When I call the web service to get the weather forcast using CityForecastByZip.xml
 

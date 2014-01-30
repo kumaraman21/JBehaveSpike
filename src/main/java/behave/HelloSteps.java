@@ -1,5 +1,12 @@
 package behave;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -21,31 +28,18 @@ public class HelloSteps {
 		
 	}
 	
-	@When("I call the web service to place an order")
-	public void placeOrder() {
+	@When("I call the web service to get the weather forcast using $inputFileName")
+	public void placeOrder(String inputFileName) {
 		try {
-//		    String parameters = "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"+
-//		        "<soap:Body>"+
-//		        " <HelloWorld xmlns=\"http://np-challenger\" />"+
-//		        "</soap:Body>"+
-//		        "</soap:Envelope>";
 		    
-		    String parameters = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-		    "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">" +
-		    "<soap12:Body>" +
-		      "<GetCityForecastByZIP xmlns=\"http://ws.cdyne.com/WeatherWS/\">" +
-		        "<ZIP>60618</ZIP>" +
-		      "</GetCityForecastByZIP>" +
-		    "</soap12:Body>" +
-		  "</soap12:Envelope>";
-		    System.out.println(parameters);
+			String parameters = readFile(inputFileName);
 		    
 		    java.net.URL url = new java.net.URL("http://wsf.cdyne.com/WeatherWS/Weather.asmx");
 		    java.net.HttpURLConnection connjava = (java.net.HttpURLConnection)url.openConnection();
 		    connjava.setRequestMethod("POST");
 		    connjava.setRequestProperty("Content-Length", "" + Integer.toString(parameters.getBytes().length));
 		    connjava.setRequestProperty("Content-Language", "en-US"); 
-		    connjava.setRequestProperty("Content-Type", "application/soap+xml; charset=utf-8");
+		    connjava.setRequestProperty("Content-Type", "text/xml");
 		    connjava.setRequestProperty("SOAPAction", "http://ws.cdyne.com/WeatherWS/GetCityForecastByZIP");
 		    connjava.setDoInput(true); 
 		    connjava.setDoOutput(true); 
@@ -64,6 +58,28 @@ public class HelloSteps {
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
+	}
+
+	private String readFile(String inputFileName)
+			throws UnsupportedEncodingException, IOException {
+		InputStream is = getClass().getResourceAsStream("/input/" + inputFileName);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		StringBuilder builder = new StringBuilder();
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        builder.append(line);
+		        line = br.readLine();
+		    }
+		    
+		} finally {
+		    br.close();
+		}
+		
+		return builder.toString();
 	}
 	
 }
